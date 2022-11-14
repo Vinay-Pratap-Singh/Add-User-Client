@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import axios from "axios";
 
-function App() {
+const App = () => {
+  const [userName, setUserName] = useState("");
+  const username = (event) => {
+    event.preventDefault();
+    setUserName(event.target.value);
+  };
+
+  const addMyUser = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("/", { name: userName });
+      console.log(res);
+    } catch (error) {
+      console.log("Unable to add the data\n", error);
+    }
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <form method="POST" onSubmit={addMyUser}>
+      <input
+        type={"text"}
+        placeholder="Enter Your Name"
+        onChange={username}
+        value={userName}
+      ></input>
+      <button type="submit">Add User</button>
+    </form>
   );
-}
+};
 
 export default App;
